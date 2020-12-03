@@ -1,0 +1,2 @@
+# NetCoreCurso
+Curso de NetCore

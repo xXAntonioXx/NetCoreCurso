@@ -12,5 +12,6 @@ namespace NetCoreCurso.Contexts
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
         public DbSet<Autor> Autores { get; set;}
+        public DbSet<Libro> Libro { get; set;}
     }
 }

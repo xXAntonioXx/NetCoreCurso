@@ -25,13 +25,24 @@ namespace NetCoreCurso.Controllers
             return this.context.Libro.Include(x => x.Autor).ToList();
         }
 
+        [HttpGet("Primer")]
+        public ActionResult<Autor> GetPrimerAutor(){
+            return this.context.Autores.FirstOrDefault();
+        }
+
         [HttpGet("{id}", Name = "ObtenerLibro")]
-        public ActionResult<Libro> Get(int id){
+        public ActionResult<Libro> Get(int id, string param2){
+
             var libro = this.context.Libro.Include(x => x.Autor).FirstOrDefault(x => x.Id == id);
+
             if(libro == null){
+
                 return NotFound();
+
             }
+
             return libro;
+
         }
 
         [HttpPost]

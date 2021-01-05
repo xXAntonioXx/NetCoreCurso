@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using NetCoreCurso.Contexts;
 using NetCoreCurso.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 
 namespace NetCoreCurso.Controllers
 {
@@ -15,21 +17,25 @@ namespace NetCoreCurso.Controllers
     public class AutorController : ControllerBase{
 
         private readonly ApplicationDbContext context;
+        private readonly ILogger<AutorController> logger;
 
-        public AutorController(ApplicationDbContext context){
+        public AutorController(ApplicationDbContext context, ILogger<AutorController> logger){
             this.context = context;
+            this.logger = logger;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Autor>> Get(){
+            this.logger.LogInformation("Obteniendo los autores");
             return this.context.Autores.ToList();
         }
 
         [HttpGet("{id}", Name = "ObtenerAutor")]
-        public ActionResult<Autor> Get(int id){
-            var autor = this.context.Autores.FirstOrDefault(x => x.Id == id);
+        public async Task<ActionResult<Autor>> Get(int id, [BindRequired] string param2){
+            var autor = await this.context.Autores.FirstOrDefaultAsync(x => x.Id == id);
 
             if(autor == null){
+                this.logger.LogWarning($"El autor de Id {id} no ha sido encontrado");
                 return NotFound();
             }
 
